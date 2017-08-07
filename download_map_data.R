@@ -51,10 +51,15 @@ download_map_data = function(
     surf = readOGR(glider_file, layer = paste0(glider, ' Surfacings'), verbose = F)
     glider = cbind.data.frame(surf@coords[,c(2,1)], as.character(surf$Name))
     colnames(glider) = c('lat', 'lon', 'time')
+    glider$time = as.character(glider$time)
+    
+    # convert timestamp of latest surfacing
+    glider$time[nrow(glider)] = strsplit(x = as.character(glider$time[nrow(glider)]), split = '[()]')[[1]][2]
     
     # latest = glider[nrow(glider),] # latest surfacing
-    glider = glider[1:nrow(glider)-1,] # all other surfacings
+    glider = glider[1:nrow(glider),] # all surfacings
     
+    # fix date
     glider$time = as.POSIXct(glider$time, format = '%m-%d %H:%M')
     glider$date = as.Date(glider$time)
     
@@ -68,19 +73,7 @@ download_map_data = function(
   
   # read in NOAA tracklines -------------------------------------------------
   
-  noaa_track_list = list.files(noaa_track_dir)
-  noaa_track = data.frame()
-  
-  for(i in seq_along(noaa_track_list)){
-    tmp = read.table(paste0(noaa_track_dir, '/', noaa_track_list[i]), sep = ',')
-    NArow = rep(NA, ncol(tmp))
-    tmp = rbind(tmp, NArow)
-    noaa_track = rbind(tmp, noaa_track) 
-  }
-  
-  colnames(noaa_track) = c('time', 'lat', 'lon', 'unk1', 'unk2', 'unk3', 'unk4')
-  noaa_track$time = as.POSIXct(noaa_track$time, format = '%d/%m/%Y %H:%M:%S')
-  noaa_track$date = as.Date(noaa_track$time)
+  load('noaa_tracks.rda')
   
   # sightings data ----------------------------------------------------------
   sightings = load_data_gsheets(sightings_file)
