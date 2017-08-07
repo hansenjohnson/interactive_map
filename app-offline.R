@@ -17,7 +17,7 @@ source('download_map_data.R')
 # user input --------------------------------------------------------------
 
 begin_date = as.Date('2017-06-01')
-map_data_fname = '2017-08-06_map_data.rda'
+map_data_fname = '2017-08-07_map_data.rda'
 force_load_data_from_file = T
 
 # read in data ------------------------------------------------------------
