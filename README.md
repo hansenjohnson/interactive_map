@@ -21,3 +21,12 @@ Currently the app is live on my shinyapps.io account, but if it proves useful I 
 
 The live application can currently be accessed [here](https://hansenjohnson.shinyapps.io/2017_right_whale_map/)
 
+## Ongoing work
+
+* Improve interface for mobile users  
+
+* Figure out how to overlay isobaths (from ETOPO1 or other)  
+
+* Host locally  
+
+* Store and host map tiles locally so they can be accessed offline  
