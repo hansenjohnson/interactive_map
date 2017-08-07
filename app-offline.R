@@ -51,6 +51,13 @@ ui <- bootstrapPage(
 )
 
 
+# define icons ------------------------------------------------------------
+
+# slocumIcon <- makeIcon(
+#   iconUrl = "icons/slocum.png",
+#   iconWidth = 70, iconHeight = 50,
+#   iconAnchorX = 35, iconAnchorY = 25)
+
 # server ------------------------------------------------------------------
 
 server <- function(input, output, session) {
@@ -223,6 +230,10 @@ server <- function(input, output, session) {
       
       # add glider track
       addPolylines(data = filteredGlider(), ~lon, ~lat, weight = 2, group = glider_track_grp) %>%
+      
+      # # add glider icon
+      # addMarkers(data = filteredGlider()[nrow(filteredGlider()),], ~lon, ~lat, 
+      #            label = as.character(~time), icon = slocumIcon, group = glider_track_grp) %>%
       
       # add glider surfacings
       addCircleMarkers(data = filteredGlider(), ~lon, ~lat, radius = 6, fillOpacity = .2, stroke = F,
