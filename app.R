@@ -61,7 +61,7 @@ proc_glider_kml = function(glider, download = T){
   glider_url = paste0('http://gliders.oceantrack.org/ge/', glider, '.kml')
   
   if(download){
-    download.file(url = glider_url, destfile = glider_file, quiet = T, mode = 'a')
+    download.file(url = glider_url, destfile = glider_file, quiet = T)
     message('File saved as: ', glider_file)
   }
   
