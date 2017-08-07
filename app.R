@@ -1,6 +1,7 @@
 # Shiny application for visualizing right whale surveys
 
 # setup -------------------------------------------------------------------
+message('Loading useful libraries')
 
 library(shiny)
 library(leaflet)
@@ -13,6 +14,7 @@ library(readxl)
 library(googlesheets)
 
 # user input --------------------------------------------------------------
+message('Reading in user input')
 
 # Google sheets
 glider_detections_file = 'Summer2017_NARWGliderDetections'
@@ -24,15 +26,16 @@ sonobuoy_file = 'Summer2017_Sonobuoys'
 # saveRDS(gs_auth, 'gs_auth.rds')
 
 # plane gps data
-noaa_track_dir = 'gps_files/'
+noaa_track_file = 'noaa_tracks.rda'
 
 # begin date
 begin_date = as.Date('2017-06-01')
 
 # define functions --------------------------------------------------------
+message('Defining helpful functions')
 
 load_data_gsheets <- function(TABLE_NAME) {
-  TABLE_NAME %>% gs_title %>% gs_read_csv
+  TABLE_NAME %>% gs_title(verbose = FALSE) %>% gs_read_csv(verbose = FALSE)
 }
 
 clean_latlon = function(d){
@@ -80,26 +83,18 @@ proc_glider_kml = function(glider, download = T){
 }
 
 # read in NOAA tracklines -------------------------------------------------
+message('Reading NOAA tracklines from: ', noaa_track_file)
 
-noaa_track_list = list.files(noaa_track_dir)
-noaa_track = data.frame()
-
-for(i in seq_along(noaa_track_list)){
-  tmp = read.table(paste0(noaa_track_dir, '/', noaa_track_list[i]), sep = ',')
-  NArow = rep(NA, ncol(tmp))
-  tmp = rbind(tmp, NArow)
-  noaa_track = rbind(tmp, noaa_track) 
-}
-
-colnames(noaa_track) = c('time', 'lat', 'lon', 'unk1', 'unk2', 'unk3', 'unk4')
-noaa_track$time = as.POSIXct(noaa_track$time, format = '%d/%m/%Y %H:%M:%S')
-noaa_track$date = as.Date(noaa_track$time)
+load(noaa_track_file)
 
 # read completed glider missions ------------------------------------------
 
-bond = proc_glider_kml('bond', download = T)
+bond = proc_glider_kml('bond')
 
 # ui ----------------------------------------------------------------------
+message('Defining Shiny user interface')
+
+
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%;padding:0px;margin:0px}"),
   
@@ -120,12 +115,15 @@ ui <- bootstrapPage(
 
 
 # server ------------------------------------------------------------------
+message('Defining Shiny server...')
+
 server <- function(input, output, session) {
   
   # authorize google drive
   gs_auth(token = 'gs_auth.rds')
   
   # sightings data ----------------------------------------------------------
+  message('    ...loading sightings from: ', sightings_file)
   
   sightings = load_data_gsheets(sightings_file)
   
@@ -138,6 +136,8 @@ server <- function(input, output, session) {
   sightings$date = as.Date(sightings$date, "%m/%d/%Y")
   
   # glider detections -------------------------------------------------------
+  message('    ...loading glider detections from: ', glider_detections_file)
+  
   detections = load_data_gsheets(glider_detections_file)
   
   colnames(detections) = c('date', 'time','score', 'lat', 'lon', 'notes', 'platform', 'name')
@@ -153,6 +153,8 @@ server <- function(input, output, session) {
   possible = subset(detections, detections$score == 'Possibly detected')
   
   # sonobuoy data -----------------------------------------------------------
+  message('    ...loading sonobuoy data from: ', sonobuoy_file)
+  
   sono = load_data_gsheets(sonobuoy_file)
   colnames(sono) = c('date', 'lat', 'lon')
   
@@ -163,6 +165,7 @@ server <- function(input, output, session) {
   sono$date = as.Date(sono$date, format = '%m/%d/%Y')
   
   # glider data ----------------------------------------------------------
+  message('    ...loading realtime glider track and surfacing data')
   
   dal556 = proc_glider_kml('dal556')
   otn200 = proc_glider_kml('otn200')
@@ -171,6 +174,8 @@ server <- function(input, output, session) {
   glider = rbind(bond, NArow, dal556, NArow, otn200)
   
   # define groups -----------------------------------------------------------
+  message('    ...defining plotting groups')
+  
   
   sightings_grp = paste0("Sightings [latest: ",
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
@@ -188,6 +193,7 @@ server <- function(input, output, session) {
                            format(max(glider$date, na.rm = T), '%d-%b'),']')
   
   # reactive data -----------------------------------------------------------
+  message('    ...writing reactive expressions')
   
   # Reactive expression for the data subsetted to what the user selected
   filteredSightings <- reactive({
@@ -215,6 +221,8 @@ server <- function(input, output, session) {
   })
   
   # basemap -----------------------------------------------------------------
+  message('    ...plotting basemap')
+  
   
   output$map <- renderLeaflet({
     # Use leaflet() here, and only include aspects of the map that
@@ -285,6 +293,8 @@ server <- function(input, output, session) {
   
   # add map components ------------------------------------------------------  
   # use an observer to adjust values according to date slider input
+  message('    ...plotting reactive map data')
+  
   observe({
     leafletProxy("map") %>%
       clearMarkers() %>%
@@ -350,5 +360,5 @@ server <- function(input, output, session) {
   })
 }
 
-# run app
+# run app -----------------------------------------------------------------
 shinyApp(ui, server)
