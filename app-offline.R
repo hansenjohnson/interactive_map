@@ -46,7 +46,8 @@ ui <- bootstrapPage(
                 
                 sliderInput("range", "", begin_date, Sys.Date(),
                             value = c((Sys.Date() - 14),Sys.Date()), animate = T),
-                tags$div(align = 'right', checkboxInput("legend", "Show legend", FALSE), 
+                tags$div(align = 'right', 
+                         # checkboxInput("legend", "Show legend", FALSE), 
                          checkboxInput("NOAA_charts", "NOAA charts", FALSE)))
 )
 
@@ -68,6 +69,8 @@ server <- function(input, output, session) {
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
   noaa_track_grp = paste0("NOAA plane tracks [latest: ",
                           format(max(noaa_track$date, na.rm = T), '%d-%b'),']')
+  shelagh_track_grp = paste0("Shelagh tracks [latest: ",
+                          format(max(shelagh_track$date, na.rm = T), '%d-%b'),']')
   sono_grp = paste0("Sonobuoys [latest: ", 
                     format(max(sono$date, na.rm = T), '%d-%b'),'; n = ', nrow(sono),']')
   detected_grp = paste0("Definite glider detections [latest: ",
@@ -88,6 +91,10 @@ server <- function(input, output, session) {
   
   filteredNoaaTrack <- reactive({
     noaa_track[noaa_track$date >= input$range[1] & noaa_track$date <= input$range[2],]
+  })
+  
+  filteredShelaghTrack <- reactive({
+    shelagh_track[shelagh_track$date >= input$range[1] & shelagh_track$date <= input$range[2],]
   })
   
   filteredGlider <- reactive({
@@ -135,6 +142,7 @@ server <- function(input, output, session) {
         overlayGroups = c('Place names',
                           sightings_grp, 
                           noaa_track_grp,
+                          shelagh_track_grp,
                           sono_grp, 
                           detected_grp, 
                           possible_grp,
@@ -143,7 +151,7 @@ server <- function(input, output, session) {
         options = layersControlOptions(collapsed = TRUE), position = 'bottomright') %>%
       
       # hide some groups by default
-      hideGroup(c('Place names', noaa_track_grp, glider_surf_grp, possible_grp, sono_grp))
+      hideGroup(c('Place names', noaa_track_grp, shelagh_track_grp, glider_surf_grp, possible_grp, sono_grp))
   })
   
   # add NOAA chart ------------------------------------------------------------------
@@ -160,20 +168,20 @@ server <- function(input, output, session) {
   
   # legend ------------------------------------------------------------------
   # Use a separate observer to recreate the legend as needed.
-  observe({
-    proxy <- leafletProxy("map")
-    
-    # Remove any existing legend, and only if the legend is
-    # enabled, create a new one.
-    proxy %>% clearControls()
-    if (input$legend) {
-      proxy %>%
-        # add legend
-        addLegend(position = 'bottomleft', title = 'Legend', 
-                  colors = c('black', '#8B6914', 'green', 'red', 'yellow', 'blue', 'orange'), 
-                  labels = c('Sightings', 'NOAA Tracklines',  'Sonobuoys', 'Definite glider detections', 'Possible glider detections', 'Glider track/surfacings', 'Glider waypoints'))
-    }
-  })
+  # observe({
+  #   proxy <- leafletProxy("map")
+  #   
+  #   # Remove any existing legend, and only if the legend is
+  #   # enabled, create a new one.
+  #   proxy %>% clearControls()
+  #   if (input$legend) {
+  #     proxy %>%
+  #       # add legend
+  #       addLegend(position = 'bottomleft', title = 'Legend', 
+  #                 colors = c('black', '#8B6914', 'green', 'red', 'yellow', 'blue', 'orange'), 
+  #                 labels = c('Sightings', 'NOAA Tracklines',  'Sonobuoys', 'Definite glider detections', 'Possible glider detections', 'Glider track/surfacings', 'Glider waypoints'))
+  #   }
+  # })
   
   # add map components ------------------------------------------------------  
   # use an observer to adjust values according to date slider input
@@ -184,6 +192,23 @@ server <- function(input, output, session) {
       
       # add NOAA gps track
       addPolylines(data = filteredNoaaTrack(), ~lon, ~lat, weight = 2, color = '#8B6914', group = noaa_track_grp) %>%
+      # addCircleMarkers(data = filteredNoaaTrack(), ~lon, ~lat,
+      #                  popup = ~paste(sep = "<br/>",
+      #                                 "NOAA plane position",
+      #                                 as.character(time),
+      #                                 paste0(as.character(lat), ', ', as.character(lon))),
+      #                  label = ~paste0('NOAA plane track: ', as.character(time), ' UTC'),
+      #                  radius = 2, fillOpacity = .3, stroke = F, color = 'green', group = noaa_track_grp) %>%
+      
+      # add shelagh gps track
+      addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = 'green', group = shelagh_track_grp) %>%
+      # addCircleMarkers(data = filteredShelaghTrack(), ~lon, ~lat,
+      #                  popup = ~paste(sep = "<br/>",
+      #                                 "Shelagh position",
+      #                                 paste0(as.character(time), ' UTC'),
+      #                                 paste0(as.character(lat), ', ', as.character(lon))),
+      #                  label = ~paste0('Shelagh track: ', as.character(time), ' UTC'),
+      #                  radius = 2, fillOpacity = .3, stroke = F, color = 'green', group = shelagh_track_grp) %>%
       
       # add sightings
       addCircleMarkers(data = filteredSightings(), ~lon, ~lat, radius = 6, fillOpacity = .3, stroke = F, col = 'black',

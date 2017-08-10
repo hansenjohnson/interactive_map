@@ -75,6 +75,10 @@ download_map_data = function(
   
   load('noaa_tracks.rda')
   
+  # read in shelagh tracklines ----------------------------------------------
+  
+  load('shelagh_tracks.rda')
+  
   # sightings data ----------------------------------------------------------
   sightings = load_data_gsheets(sightings_file)
   
