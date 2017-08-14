@@ -187,9 +187,9 @@ server <- function(input, output, session) {
   
   sightings_grp = paste0("Sightings [latest: ",
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
-  noaa_track_grp = paste0("NOAA plane tracks [latest: ",
+  noaa_track_grp = paste0("NOAA plane effort [latest: ",
                           format(max(noaa_track$date, na.rm = T), '%d-%b'),']')
-  shelagh_track_grp = paste0("Shelagh tracks [latest: ",
+  shelagh_track_grp = paste0("Shelagh effort [latest: ",
                              format(max(shelagh_track$date, na.rm = T), '%d-%b'),']')
   sono_grp = paste0("Sonobuoys [latest: ", 
                     format(max(sono$date, na.rm = T), '%d-%b'),'; n = ', nrow(sono),']')
@@ -197,7 +197,7 @@ server <- function(input, output, session) {
                         format(max(detected$date, na.rm = T), '%d-%b'),'; n = ', nrow(detected),']')
   possible_grp = paste0("Possible glider detections [latest: ",
                         format(max(possible$date, na.rm = T), '%d-%b'),'; n = ', nrow(possible),']')
-  glider_track_grp = paste0("Glider tracks [latest: ", 
+  glider_track_grp = paste0("Glider effort [latest: ", 
                             format(max(glider$date, na.rm = T), '%d-%b'),']')
   glider_surf_grp = paste0("Glider surfacings [latest: ", 
                            format(max(glider$date, na.rm = T), '%d-%b'),']')
@@ -318,7 +318,7 @@ server <- function(input, output, session) {
       addPolylines(data = filteredNoaaTrack(), ~lon, ~lat, weight = 2, color = '#8B6914', group = noaa_track_grp) %>%
       
       # add shelagh gps track
-      addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = 'green', group = shelagh_track_grp) %>%
+      addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = '#2E2E2E', group = shelagh_track_grp) %>%
       # addCircleMarkers(data = filteredShelaghTrack(), ~lon, ~lat,
       #                  popup = ~paste(sep = "<br/>",
       #                                 "Shelagh position",

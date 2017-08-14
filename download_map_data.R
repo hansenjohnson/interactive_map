@@ -12,7 +12,7 @@ download_map_data = function(
   sonobuoy_file = 'Summer2017_Sonobuoys',
   noaa_track_dir = 'gps_files/',
   begin_date = as.Date('2017-06-01'),
-  map_data_fname = '2017-08-06_map_data.rda'){
+  map_data_fname = ''){
   
   # define functions --------------------------------------------------------
   

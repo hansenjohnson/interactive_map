@@ -17,7 +17,7 @@ source('download_map_data.R')
 # user input --------------------------------------------------------------
 
 begin_date = as.Date('2017-06-01')
-map_data_fname = '2017-08-07_map_data.rda'
+map_data_fname = '2017-08-14_map_data.rda'
 force_load_data_from_file = T
 
 # read in data ------------------------------------------------------------
@@ -201,7 +201,7 @@ server <- function(input, output, session) {
       #                  radius = 2, fillOpacity = .3, stroke = F, color = 'green', group = noaa_track_grp) %>%
       
       # add shelagh gps track
-      addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = 'green', group = shelagh_track_grp) %>%
+      addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = '#2E2E2E', group = shelagh_track_grp) %>%
       # addCircleMarkers(data = filteredShelaghTrack(), ~lon, ~lat,
       #                  popup = ~paste(sep = "<br/>",
       #                                 "Shelagh position",
