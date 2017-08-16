@@ -5,8 +5,8 @@ shelagh_track_file = 'shelagh_tracks.rda'
 
 # read in data ------------------------------------------------------------
 
-trip1_file = '~/Projects/2017_shelagh_gsl/mysticetus/2017-07-10-CWI-V/2017-07-10-CWI-V.csv'
-trip2_file = '~/Projects/2017_shelagh_gsl/mysticetus/2017-08-02-CWI-V/2017-08-02-CWI-V.csv'
+trip1_file = '~/Projects/2017_shelagh_gsl/data-effort/2017-07-10-CWI-V.csv'
+trip2_file = '~/Projects/2017_shelagh_gsl/data-effort/2017-08-12-CWI-V.csv'
 
 trip1 = read.csv(trip1_file)
 trip2 = read.csv(trip2_file)
