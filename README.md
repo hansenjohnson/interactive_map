@@ -22,6 +22,7 @@ Currently the app is live on my shinyapps.io account, but if it proves useful I 
 * `app-offline.R` - a version of the app that runs without internet (useful for working offshore, or troubleshooting)
 * `app.R` - the live app
 * `deploy_app.R` - deploy the app and necessary components to shinyapps.io
+* `download_map_data.R` - download and save all data required for mapping for later use by `app_offline.R`
 * `get_noaa_tracks.R` - search google drive folder for .gps files (from NOAA aerial surveys) and download
 * `proc_noaa_tracks.R` - process (and save) NOAA aerial survey effort for use in the app
 * `proc_shelagh_tracks.R` - process (and save) vessel survey effort from the R/V Shelagh for use in the app
