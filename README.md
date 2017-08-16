@@ -17,6 +17,17 @@ I wrote this application in R. It relies heavily on 'Shiny' for the dynamic comp
 
 Currently the app is live on my shinyapps.io account, but if it proves useful I hope to host it locally to improve performance and build in other capabilities.
 
+## Description of Contents
+
+* `app-offline.R` - a version of the app that runs without internet (useful for working offshore, or troubleshooting)
+* `app.R` - the live app
+* `deploy_app.R` - deploy the app and necessary components to shinyapps.io
+* `get_noaa_tracks.R` - search google drive folder for .gps files (from NOAA aerial surveys) and download
+* `proc_noaa_tracks.R` - process (and save) NOAA aerial survey effort for use in the app
+* `proc_shelagh_tracks.R` - process (and save) vessel survey effort from the R/V Shelagh for use in the app
+
+NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not included here. Please email me (hansen.johnson@dal.ca) if you require access to these data.
+
 ## Demonstration
 
 The live application can currently be accessed [here](https://hansenjohnson.shinyapps.io/2017_right_whale_map/)
