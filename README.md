@@ -20,7 +20,10 @@ Currently the app is live on my shinyapps.io account, but if it proves useful I 
 ## Description of Contents
 
 * `app-offline.R` - a version of the app that runs without internet (useful for working offshore, or troubleshooting)
-* `app.R` - the live app
+* `app-local.R` - the version of the app that's live on shinyapps.io  
+* `app-server.R` - the version of the app that I'm currently working to host on a local server
+* `get_glider_tracks.sh` - bash script that downloads the glider data and runs `proc_glider_tracks.R` (called by cron job)  
+* `proc_glider_tracks.R` - processes all `*_track.kml` files on the server and saves them for use in the app
 * `deploy_app.R` - deploy the app and necessary components to shinyapps.io
 * `download_map_data.R` - download and save all data required for mapping for later use by `app_offline.R`
 * `get_noaa_tracks.R` - search google drive folder for .gps files (from NOAA aerial surveys) and download
