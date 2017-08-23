@@ -3,13 +3,12 @@
 # user input --------------------------------------------------------------
 
 # name of output file with processed glider data
-# !!! NOTE - this must include the full path WITHOUT symlinks !!!
-glider_track_file = '/srv/shiny-server/whale_map/glider_tracks.rda' 
+glider_track_file = 'glider_tracks.rda' 
 
 # define kml processing function ------------------------------------------
 
 proc_glider_kml = function(glider_file){
-  library(rgdal)
+  library(rgdal, quietly = T,warn.conflicts = F,verbose = F)
   
   message('Processing glider file: ', glider_file)
   s = proc.time()
