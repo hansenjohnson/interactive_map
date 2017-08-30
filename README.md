@@ -42,6 +42,6 @@ The live application can currently be accessed [here](https://hansenjohnson.shin
 
 * Figure out how to overlay isobaths (from ETOPO1 or other)  
 
-* Host locally  
+* **Host locally **
 
-* Store and host map tiles locally so they can be accessed offline  
+* Add glider waypoint layer
