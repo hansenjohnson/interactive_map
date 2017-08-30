@@ -45,5 +45,3 @@ The live application can currently be accessed [here](https://hansenjohnson.shin
 * **Host locally **
 
 * Add glider waypoint layer
-
-* Add text in legend that specifies sightings originate from **all** platforms
