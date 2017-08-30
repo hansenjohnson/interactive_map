@@ -1,4 +1,5 @@
 # Shiny application for visualizing right whale surveys
+# (shinyapps.io version)
 
 # setup -------------------------------------------------------------------
 message('Loading useful libraries')
@@ -185,7 +186,7 @@ server <- function(input, output, session) {
   # define groups -----------------------------------------------------------
   message('    ...defining plotting groups')
   
-  sightings_grp = paste0("Sightings [latest: ",
+  sightings_grp = paste0("Sightings (all vessel and aerial) [latest: ",
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
   noaa_track_grp = paste0("NOAA plane effort [latest: ",
                           format(max(noaa_track$date, na.rm = T), '%d-%b'),']')
