@@ -1,4 +1,4 @@
-# deploy 2017 right whale sightings app
+# deploy 2017 right whale sightings app to shinyapps.io
 
 library(rsconnect)
 

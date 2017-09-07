@@ -1,5 +1,8 @@
 # Shiny application for visualizing right whale surveys
-# (shinyapps.io version)
+
+# This is the version of the app that is/was hosted at shinyapps.io. The live url is/was: 
+# https://hansenjohnson.shinyapps.io/2017_right_whale_map/. 
+# Note that the name of this file must be changed to 'app.R' in order to deploy successfully
 
 # setup -------------------------------------------------------------------
 message('Loading useful libraries')

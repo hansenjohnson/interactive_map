@@ -1,7 +1,6 @@
 # Shiny application for visualizing right whale surveys
 
 # This is the 'offline version' that I augmented for use without internet (e.g. offshore). It downloads and saves all data locally (with the current, notable exception of the map tiles) when internet is available, then uses that data to run when offline. This has also proven very useful for testing purposes, as the runs are much faster than the online version. Eventually the two should be merged, but that's a project for another day...
-# - Hansen
 
 # setup -------------------------------------------------------------------
 
