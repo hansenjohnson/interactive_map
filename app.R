@@ -1,5 +1,7 @@
 # Shiny application for visualizing right whale surveys
 
+# This is the version of the app that will be hosted locally at our server at Dal. Note that it must be named 'app.R' to be deployed successfully...
+
 # setup -------------------------------------------------------------------
 message('Loading useful libraries')
 
