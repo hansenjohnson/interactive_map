@@ -10,8 +10,8 @@ glider_track_file = 'glider_tracks.rda'
 proc_glider_kml = function(glider_file){
   library(rgdal, quietly = T,warn.conflicts = F,verbose = F)
   
-  message('Processing glider file: ', glider_file)
-  s = proc.time()
+  # message('Processing glider file: ', glider_file)
+  # s = proc.time()
   
   # list layers of kml
   lyrs = ogrListLayers(glider_file)
@@ -31,7 +31,7 @@ proc_glider_kml = function(glider_file){
   glider$time = as.POSIXct(glider$time, format = '%m-%d %H:%M')
   glider$date = as.Date(glider$time)
   
-  message('Complete! Time elapsed = ', round((proc.time()-s)[3],2), 's')
+  # message('Complete! Time elapsed = ', round((proc.time()-s)[3],2), 's')
   
   # return(list(glider=glider,latest=latest))
   return(glider)
@@ -56,4 +56,4 @@ glider = do.call(rbind, glider)
 
 # save for use in the application
 save(glider, file = glider_track_file)
-message('Glider tracks combined and saved as: ', glider_track_file)
+# message('Glider tracks combined and saved as: ', glider_track_file)

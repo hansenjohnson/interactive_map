@@ -9,8 +9,8 @@ glider_detection_file = 'glider_detections.rda'
 
 proc_glider_detections = function(manual_analysis_file){
   
-  message('Processing glider detection file: ', manual_analysis_file)
-  s = proc.time()
+  # message('Processing glider detection file: ', manual_analysis_file)
+  # s = proc.time()
   
   # read in data
   detections = read.csv(manual_analysis_file)
@@ -31,7 +31,7 @@ proc_glider_detections = function(manual_analysis_file){
   detections$time = as.POSIXct(detections$datetime_utc,format = '%Y%m%d%H%M%S',tz = 'UTC')
   detections$date = as.Date(detections$time)
   
-  message('Complete! Time elapsed = ', round((proc.time()-s)[3],2), 's')
+  # message('Complete! Time elapsed = ', round((proc.time()-s)[3],2), 's')
   
   return(detections)
 }
@@ -52,4 +52,4 @@ detections = do.call(rbind, detections)
 
 # save for use in the application
 save(detections, file = glider_detection_file)
-message('Glider tracks combined and saved as: ', glider_detection_file)
+# message('Glider tracks combined and saved as: ', glider_detection_file)
