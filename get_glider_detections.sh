@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # download glider detection files
 
 # NOTE - this script makes use of associative arrays, 
