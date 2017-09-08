@@ -24,7 +24,7 @@ Currently the app is live on my shinyapps.io account, but if it proves useful I 
 * `get_glider_detections.sh` - bash script that downloads the glider detections and runs `proc_glider_detections.R` (called by cron job)
 * `proc_glider_tracks.R` - processes all `*_track.kml` files on the server and saves them for use in the app
 * `proc_glider_detections.R` - processes all `*_manual_analysis` files on the server and saves them for use in the app
-* `dev\` - directory with numerous scripts used in the development process
+* `dev/` - directory with numerous scripts used in the development process
 
 NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not included here. Please email me (hansen.johnson@dal.ca) if you require access to these data.
 
