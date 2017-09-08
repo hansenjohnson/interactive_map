@@ -120,25 +120,18 @@ server <- function(input, output, session) {
   # glider detections -------------------------------------------------------
   message('    ...loading glider detections from: ', glider_detections_file)
   
-  # detections = load_data_gsheets(glider_detections_file)
-  # 
-  # colnames(detections) = c('date', 'time','score', 'lat', 'lon', 'notes', 'platform', 'name')
-  # 
-  # # clean lat lon
-  # detections = clean_latlon(detections)
-  # 
-  # # fix date
-  # detections$date = as.Date(detections$date, format = '%m/%d/%Y')
-  # # subset
-  # detected = subset(detections, detections$score == 'Detected')
-  # possible = subset(detections, detections$score == 'Possibly detected') 
-  
   # load glider detections file
   load(glider_detections_file)
   
   # subset
   detected = subset(detections, detections$right == 'present')
   possible = subset(detections, detections$right == 'maybe')
+  
+  # combine detections/sightings --------------------------------------------
+  
+  lat = c(detections$lat, sightings$lat)
+  lon = c(detections$lon, sightings$lon)
+  ALL = cbind.data.frame(lat,lon)
   
   # sonobuoy data -----------------------------------------------------------
   message('    ...loading sonobuoy data from: ', sonobuoy_file)
@@ -216,9 +209,8 @@ server <- function(input, output, session) {
     # Use leaflet() here, and only include aspects of the map that
     # won't need to change dynamically (at least, not unless the
     # entire map is being torn down and recreated).
-    leaflet(sightings) %>% 
+    leaflet(ALL) %>% 
       addProviderTiles(providers$Esri.OceanBasemap) %>%
-      # addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Place names') %>%
       addProviderTiles(providers$Stamen.TonerLabels, group = 'Place names') %>%
       fitBounds(~max(lon, na.rm = T), ~min(lat, na.rm = T), ~min(lon, na.rm = T), ~max(lat, na.rm = T)) %>%
       
