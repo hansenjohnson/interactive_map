@@ -218,7 +218,8 @@ server <- function(input, output, session) {
     # entire map is being torn down and recreated).
     leaflet(sightings) %>% 
       addProviderTiles(providers$Esri.OceanBasemap) %>%
-      addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Place names') %>%
+      # addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Place names') %>%
+      addProviderTiles(providers$Stamen.TonerLabels, group = 'Place names') %>%
       fitBounds(~max(lon, na.rm = T), ~min(lat, na.rm = T), ~min(lon, na.rm = T), ~max(lat, na.rm = T)) %>%
       
       # use NOAA graticules
