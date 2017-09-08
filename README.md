@@ -19,29 +19,27 @@ Currently the app is live on my shinyapps.io account, but if it proves useful I 
 
 ## Description of Contents
 
-* `app-offline.R` - a version of the app that runs without internet (useful for working offshore, or troubleshooting)
-* `app-local.R` - the version of the app that's live on shinyapps.io  
-* `app-server.R` - the version of the app that I'm currently working to host on a local server
+* `app.R` - the version of the app that is currently running on a local server here at Dal
 * `get_glider_tracks.sh` - bash script that downloads the glider data and runs `proc_glider_tracks.R` (called by cron job)  
+* `get_glider_detections.sh` - bash script that downloads the glider detections and runs `proc_glider_detections.R` (called by cron job)
 * `proc_glider_tracks.R` - processes all `*_track.kml` files on the server and saves them for use in the app
-* `deploy_app.R` - deploy the app and necessary components to shinyapps.io
-* `download_map_data.R` - download and save all data required for mapping for later use by `app_offline.R`
-* `get_noaa_tracks.R` - search google drive folder for .gps files (from NOAA aerial surveys) and download
-* `proc_noaa_tracks.R` - process (and save) NOAA aerial survey effort for use in the app
-* `proc_shelagh_tracks.R` - process (and save) vessel survey effort from the R/V Shelagh for use in the app
+* `proc_glider_detections.R` - processes all `*_manual_analysis` files on the server and saves them for use in the app
+* `dev\` - directory with numerous scripts used in the development process
 
 NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not included here. Please email me (hansen.johnson@dal.ca) if you require access to these data.
 
 ## Demonstration
 
-The live application can currently be accessed [here](https://hansenjohnson.shinyapps.io/2017_right_whale_map/)
+The live application can currently be accessed [here](http://leviathan.ocean.dal.ca/right_whale_map/)
 
 ## Ongoing work
 
-* Improve interface for mobile users  
+* remove internal messages to reduce chron mail
 
-* Figure out how to overlay isobaths (from ETOPO1 or other)  
+* adjust wget settings to only download new data, but save as new filename (i.e. use both -O and -N options)
 
-* **Host locally **
+* add glider waypoint layer
 
-* Add glider waypoint layer
+* improve interface for mobile users  
+
+* figure out how to overlay isobaths (from ETOPO1 or other)  
