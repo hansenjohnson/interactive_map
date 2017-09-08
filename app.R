@@ -19,11 +19,9 @@ library(googlesheets)
 message('Reading in user input')
 
 # Google sheets
-# glider_detections_file = 'Summer2017_NARWGliderDetections'
 sightings_file = 'Summer2017_NARWSightings'
-sonobuoy_file = 'Summer2017_Sonobuoys'
 
-# user info
+# # user info
 # gs_auth = gs_auth()
 # saveRDS(gs_auth, 'gs_auth.rds')
 
@@ -38,6 +36,9 @@ shelagh_track_file = 'shelagh_tracks.rda'
 
 # glider gps data
 glider_track_file = 'glider_tracks.rda'
+
+# sonobuoy positions
+sonobuoy_file = 'sonobuoys.rda'
 
 # begin date
 begin_date = as.Date('2017-06-01')
@@ -136,14 +137,7 @@ server <- function(input, output, session) {
   # sonobuoy data -----------------------------------------------------------
   message('    ...loading sonobuoy data from: ', sonobuoy_file)
   
-  sono = load_data_gsheets(sonobuoy_file)
-  colnames(sono) = c('date', 'lat', 'lon')
-  
-  # clean lat lon
-  sono = clean_latlon(sono)
-  
-  # fix date
-  sono$date = as.Date(sono$date, format = '%m/%d/%Y')
+  load(sonobuoy_file)
   
   # glider data ----------------------------------------------------------
   message('    ...loading realtime glider track and surfacing data')
