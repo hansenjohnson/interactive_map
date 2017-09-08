@@ -1,7 +1,7 @@
 #!/bin/sh
 # download glider files
 
-DESTDIR=/home/hansen/shiny-server/whale_map # server
+DESTDIR=/srv/shiny-server/right_whale_map # server
 # DESTDIR=/Users/hansenjohnson/Projects/interactive_map # local
 URL=http://gliders.oceantrack.org/ge
 
