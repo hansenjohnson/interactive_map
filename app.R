@@ -19,13 +19,16 @@ library(googlesheets)
 message('Reading in user input')
 
 # Google sheets
-glider_detections_file = 'Summer2017_NARWGliderDetections'
+# glider_detections_file = 'Summer2017_NARWGliderDetections'
 sightings_file = 'Summer2017_NARWSightings'
 sonobuoy_file = 'Summer2017_Sonobuoys'
 
 # user info
 # gs_auth = gs_auth()
 # saveRDS(gs_auth, 'gs_auth.rds')
+
+# glider detection data
+glider_detections_file = 'glider_detections.rda'
 
 # plane gps data
 noaa_track_file = 'noaa_tracks.rda'
@@ -117,19 +120,25 @@ server <- function(input, output, session) {
   # glider detections -------------------------------------------------------
   message('    ...loading glider detections from: ', glider_detections_file)
   
-  detections = load_data_gsheets(glider_detections_file)
+  # detections = load_data_gsheets(glider_detections_file)
+  # 
+  # colnames(detections) = c('date', 'time','score', 'lat', 'lon', 'notes', 'platform', 'name')
+  # 
+  # # clean lat lon
+  # detections = clean_latlon(detections)
+  # 
+  # # fix date
+  # detections$date = as.Date(detections$date, format = '%m/%d/%Y')
+  # # subset
+  # detected = subset(detections, detections$score == 'Detected')
+  # possible = subset(detections, detections$score == 'Possibly detected') 
   
-  colnames(detections) = c('date', 'time','score', 'lat', 'lon', 'notes', 'platform', 'name')
-  
-  # clean lat lon
-  detections = clean_latlon(detections)
-  
-  # fix date
-  detections$date = as.Date(detections$date, format = '%m/%d/%Y')
+  # load glider detections file
+  load(glider_detections_file)
   
   # subset
-  detected = subset(detections, detections$score == 'Detected')
-  possible = subset(detections, detections$score == 'Possibly detected')
+  detected = subset(detections, detections$right == 'present')
+  possible = subset(detections, detections$right == 'maybe')
   
   # sonobuoy data -----------------------------------------------------------
   message('    ...loading sonobuoy data from: ', sonobuoy_file)
