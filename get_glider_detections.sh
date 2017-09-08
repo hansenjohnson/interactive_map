@@ -20,7 +20,8 @@ URL=(
 
 # download data
 for i in "${!URL[@]}"; do   	
-	wget -q -N ${URL[$i]} ${DESTDIR}/${i}_manual_analysis.csv	
+	wget -q ${URL[$i]} -O ${DESTDIR}/${i}_manual_analysis.csv
+	if [ 0 -ne $? ] ; then { echo "Failed downloading data from ${i}"; exit 1; }; fi
 done
 
 # run R script to process these data
