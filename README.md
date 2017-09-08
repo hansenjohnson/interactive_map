@@ -13,9 +13,9 @@ I am a member of a large team of researchers working to monitor and mitigate ris
 
 ## Approach / Overview
 
-I wrote this application in R. It relies heavily on 'Shiny' for the dynamic components (i.e. date slider bar, etc), 'leaflet' for interactive mapping, and 'googlesheets' for convenient, shared data input. Ideally a data originator can enter their sighting, glider detection, or otherwise into a common google spreadsheet, then open the shiny application and have it update immediately.
+I wrote this application in R. It relies heavily on 'Shiny' for the dynamic components (i.e. date slider bar, etc), 'leaflet' for interactive mapping, and 'googlesheets' for convenient, shared data input.
 
-Currently the app is live on my shinyapps.io account, but if it proves useful I hope to host it locally to improve performance and build in other capabilities.
+I have taken steps to keep the map's content up to date with as little effort as possible. Sightings data are read directly from a google spreadsheet shared with DFO and several other data originators. As soon as the spreadsheet is updated, the map updates as well. Glider tracklines and acoustic detections are updated hourly via server-side cron job. With planning, the same could be done for vessel and plane tracklines, but because these surveys are mostly concluded there's no need to keep them updated regularly.
 
 ## Description of Contents
 
@@ -38,7 +38,7 @@ The live application can currently be accessed [here](http://leviathan.ocean.dal
 
 * adjust wget settings to only download new data, but save as new filename (i.e. use both -O and -N options)
 
-* add glider waypoint layer
+* store sonobuoy data locally (i.e. do not pull from google sheets)
 
 * improve interface for mobile users  
 
