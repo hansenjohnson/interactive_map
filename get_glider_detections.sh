@@ -22,3 +22,6 @@ URL=(
 for i in "${!URL[@]}"; do   	
 	wget -q -N ${URL[$i]} ${DESTDIR}/${i}_manual_analysis.csv	
 done
+
+# run R script to process these data
+( cd ${DESTDIR}; Rscript -e "source('proc_glider_detections.R')" )
