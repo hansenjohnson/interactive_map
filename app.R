@@ -1,6 +1,6 @@
 # Shiny application for visualizing right whale surveys
 
-# This is the version of the app that will be hosted locally at our server at Dal. Note that it must be named 'app.R' to be deployed successfully...
+# This is the version of the app that is hosted locally at our server at Dal. Note that it must be named 'app.R' to be deployed successfully...
 
 # setup -------------------------------------------------------------------
 message('Loading useful libraries')
@@ -25,17 +25,14 @@ sightings_file = 'Summer2017_NARWSightings'
 # gs_auth = gs_auth()
 # saveRDS(gs_auth, 'gs_auth.rds')
 
-# glider detection data
-glider_detections_file = 'glider_detections.rda'
+# glider data
+glider_data_file = 'glider_data.rda'
 
 # plane gps data
 noaa_track_file = 'noaa_tracks.rda'
 
 # shelagh gps data
 shelagh_track_file = 'shelagh_tracks.rda'
-
-# glider gps data
-glider_track_file = 'glider_tracks.rda'
 
 # sonobuoy positions
 sonobuoy_file = 'sonobuoys.rda'
@@ -118,15 +115,11 @@ server <- function(input, output, session) {
   # convert to date
   sightings$date = as.Date(sightings$date, "%m/%d/%Y")
   
-  # glider detections -------------------------------------------------------
-  message('    ...loading glider detections from: ', glider_detections_file)
+  # glider data -------------------------------------------------------
+  message('    ...loading glider data from: ', glider_data_file)
   
-  # load glider detections file
-  load(glider_detections_file)
-  
-  # subset
-  detected = subset(detections, detections$right == 'present')
-  possible = subset(detections, detections$right == 'maybe')
+  # load glider data file
+  load(glider_data_file)
   
   # combine detections/sightings --------------------------------------------
   
@@ -138,11 +131,6 @@ server <- function(input, output, session) {
   message('    ...loading sonobuoy data from: ', sonobuoy_file)
   
   load(sonobuoy_file)
-  
-  # glider data ----------------------------------------------------------
-  message('    ...loading realtime glider track and surfacing data')
-  
-  load(glider_track_file)
   
   # define groups -----------------------------------------------------------
   message('    ...defining plotting groups')
