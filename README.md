@@ -21,7 +21,7 @@ I have taken steps to keep the map's content up to date with as little effort as
 
 * `app.R` - the version of the app that is currently running on a local server here at Dal
 * `get_glider_data.sh` - bash script that downloads the glider data (both tracks and detections) and runs `proc_glider_data.R` (called by cron job)  
-* `proc_glider_data.R` - processes and combines glider data (tracklines and detections) on the server and saves them for use in the app
+* `proc_glider_data.R` - processes and combines glider data on the server and saves them as `glider_data.rda` for use in the app
 * `dev/` - directory with numerous scripts used in the development process
 
 NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not included here. Please email me (hansen.johnson@dal.ca) if you require access to these data.
