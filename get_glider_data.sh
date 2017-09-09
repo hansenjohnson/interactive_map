@@ -2,8 +2,8 @@
 # download glider data (detections and tracklines), then process using R script
 
 # Select app directory
-#DESTDIR=/srv/shiny-server/right_whale_map # server
-DESTDIR=/Users/hansenjohnson/Projects/interactive_map # local
+DESTDIR=/srv/shiny-server/right_whale_map # server
+#DESTDIR=/Users/hansenjohnson/Projects/interactive_map # local
 
 # OTN URL (do not change)
 OTN=http://gliders.oceantrack.org/ge
