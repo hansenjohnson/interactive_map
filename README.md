@@ -20,10 +20,8 @@ I have taken steps to keep the map's content up to date with as little effort as
 ## Description of Contents
 
 * `app.R` - the version of the app that is currently running on a local server here at Dal
-* `get_glider_tracks.sh` - bash script that downloads the glider data and runs `proc_glider_tracks.R` (called by cron job)  
-* `get_glider_detections.sh` - bash script that downloads the glider detections and runs `proc_glider_detections.R` (called by cron job)
-* `proc_glider_tracks.R` - processes all `*_track.kml` files on the server and saves them for use in the app
-* `proc_glider_detections.R` - processes all `*_manual_analysis` files on the server and saves them for use in the app
+* `get_glider_data.sh` - bash script that downloads the glider data (both tracks and detections) and runs `proc_glider_data.R` (called by cron job)  
+* `proc_glider_data.R` - processes and combines glider data (tracklines and detections) on the server and saves them for use in the app
 * `dev/` - directory with numerous scripts used in the development process
 
 NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not included here. Please email me (hansen.johnson@dal.ca) if you require access to these data.
@@ -33,12 +31,6 @@ NOTE - the data (e.g. sightings, tracklines, etc) plotted on the map are not inc
 The live application can currently be accessed [here](http://leviathan.ocean.dal.ca/right_whale_map/)
 
 ## Ongoing work
-
-* remove internal messages to reduce chron mail
-
-* adjust wget settings to only download new data, but save as new filename (i.e. use both -O and -N options)
-
-* store sonobuoy data locally (i.e. do not pull from google sheets)
 
 * improve interface for mobile users  
 
