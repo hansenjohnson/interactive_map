@@ -76,8 +76,6 @@ message('Defining Shiny user interface')
 
 ui <- bootstrapPage(
   
-  # import styles from index
-  includeCSS("../server_index/css/style.css"),
   tags$style(type = "text/css", "html, body {width:100%;height:100%;padding:0px;margin:0px}"),
   
   leafletOutput("map", width = "100%", height = "100%"),
