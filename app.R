@@ -16,7 +16,6 @@ library(readxl)
 library(googlesheets)
 
 # user input --------------------------------------------------------------
-message('Reading in user input')
 
 # Google sheets
 sightings_file = 'Summer2017_NARWSightings'
@@ -27,6 +26,9 @@ sightings_file = 'Summer2017_NARWSightings'
 
 # glider data
 glider_data_file = 'glider_data.rda'
+
+# wave glider data
+waveglider_data_file = 'waveglider_data.rda'
 
 # plane gps data
 noaa_track_file = 'noaa_tracks.rda'
@@ -41,7 +43,6 @@ sonobuoy_file = 'sonobuoys.rda'
 begin_date = as.Date('2017-06-01')
 
 # define functions --------------------------------------------------------
-message('Defining helpful functions')
 
 load_data_gsheets <- function(TABLE_NAME) {
   TABLE_NAME %>% gs_title(verbose = FALSE) %>% gs_read_csv(verbose = FALSE)
@@ -62,17 +63,22 @@ clean_latlon = function(d){
 }
 
 # read in NOAA tracklines -------------------------------------------------
-message('Reading NOAA tracklines from: ', noaa_track_file)
 
 load(noaa_track_file)
 
 # read in shelagh tracklines ----------------------------------------------
-message('Reading Shelagh tracklines from: ', shelagh_track_file)
 
 load(shelagh_track_file)
 
+# sonobuoy data -----------------------------------------------------------
+
+load(sonobuoy_file)
+
+# read in waveglider track ------------------------------------------------
+
+load(waveglider_data_file)
+
 # ui ----------------------------------------------------------------------
-message('Defining Shiny user interface')
 
 ui <- bootstrapPage(
   
@@ -96,7 +102,6 @@ ui <- bootstrapPage(
 
 
 # server ------------------------------------------------------------------
-message('Defining Shiny server...')
 
 server <- function(input, output, session) {
   
@@ -104,7 +109,6 @@ server <- function(input, output, session) {
   gs_auth(token = 'gs_auth.rds')
   
   # sightings data ----------------------------------------------------------
-  message('    ...loading sightings from: ', sightings_file)
   
   sightings = load_data_gsheets(sightings_file)
   
@@ -117,7 +121,6 @@ server <- function(input, output, session) {
   sightings$date = as.Date(sightings$date, "%m/%d/%Y")
   
   # glider data -------------------------------------------------------
-  message('    ...loading glider data from: ', glider_data_file)
   
   # load glider data file
   load(glider_data_file)
@@ -128,13 +131,7 @@ server <- function(input, output, session) {
   lon = c(detections$lon, sightings$lon)
   ALL = cbind.data.frame(lat,lon)
   
-  # sonobuoy data -----------------------------------------------------------
-  message('    ...loading sonobuoy data from: ', sonobuoy_file)
-  
-  load(sonobuoy_file)
-  
   # define groups -----------------------------------------------------------
-  message('    ...defining plotting groups')
   
   sightings_grp = paste0("Sightings (all vessel and aerial) [latest: ",
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
@@ -154,7 +151,6 @@ server <- function(input, output, session) {
                            format(max(glider$date, na.rm = T), '%d-%b'),']')
   
   # reactive data -----------------------------------------------------------
-  message('    ...writing reactive expressions')
   
   # Reactive expression for the data subsetted to what the user selected
   filteredSightings <- reactive({
@@ -173,6 +169,10 @@ server <- function(input, output, session) {
     glider[glider$date >= input$range[1] & glider$date <= input$range[2],]
   })
   
+  filteredWave <- reactive({
+    wave[wave$date >= input$range[1] & wave$date <= input$range[2],]
+  })
+  
   filteredDetected <- reactive({
     detected[detected$date >= input$range[1] & detected$date <= input$range[2],]
   })
@@ -186,12 +186,8 @@ server <- function(input, output, session) {
   })
   
   # basemap -----------------------------------------------------------------
-  message('    ...plotting basemap')
   
   output$map <- renderLeaflet({
-    # Use leaflet() here, and only include aspects of the map that
-    # won't need to change dynamically (at least, not unless the
-    # entire map is being torn down and recreated).
     leaflet(ALL) %>% 
       addProviderTiles(providers$Esri.OceanBasemap) %>%
       addProviderTiles(providers$Stamen.TonerLabels, group = 'Place names') %>%
@@ -207,8 +203,7 @@ server <- function(input, output, session) {
       # add extra map features
       # addMouseCoordinates(style = 'basic') %>%
       addScaleBar(position = 'bottomleft')%>%
-      addMeasure(primaryLengthUnit = "kilometers",secondaryLengthUnit = 'miles', primaryAreaUnit =
-                   "hectares",secondaryAreaUnit="acres", position = 'bottomleft') %>%
+      addMeasure(primaryLengthUnit = "kilometers",secondaryLengthUnit = 'miles', primaryAreaUnit = "hectares",secondaryAreaUnit="acres", position = 'bottomleft') %>%
       
        # add layer control panel
     addLayersControl(
@@ -258,7 +253,6 @@ server <- function(input, output, session) {
   
   # add map components ------------------------------------------------------  
   # use an observer to adjust values according to date slider input
-  message('    ...plotting reactive map data')
   
   observe({
     leafletProxy("map") %>%
@@ -270,6 +264,7 @@ server <- function(input, output, session) {
       
       # add shelagh gps track
       addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = '#2E2E2E', group = shelagh_track_grp) %>%
+      
       # addCircleMarkers(data = filteredShelaghTrack(), ~lon, ~lat,
       #                  popup = ~paste(sep = "<br/>",
       #                                 "Shelagh position",
@@ -323,6 +318,9 @@ server <- function(input, output, session) {
       
       # add glider track
       addPolylines(data = filteredGlider(), ~lon, ~lat, weight = 2, group = glider_track_grp) %>%
+      
+      # add wave glider track
+      addPolylines(data = filteredWave(), ~lon, ~lat, weight = 2, group = glider_track_grp) %>%
       
       # add glider surfacings
       addCircleMarkers(data = filteredGlider(), ~lon, ~lat, radius = 6, fillOpacity = .2, stroke = F,
