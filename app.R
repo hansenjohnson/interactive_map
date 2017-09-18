@@ -86,7 +86,7 @@ ui <- bootstrapPage(
   
   leafletOutput("map", width = "100%", height = "100%"),
   
-  absolutePanel(top = 10, right = 50,fixed = T, width='100px',
+  absolutePanel(top = 10, right = 50,fixed = T, width='200px',
                 h3(strong('2017 Right whale surveys'), align = 'center'),
                 h6(strong(paste0('CAUTION: raw data! Updating automatically...')), 
                    br(),
