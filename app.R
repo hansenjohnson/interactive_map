@@ -32,6 +32,7 @@ waveglider_data_file = 'waveglider_data.rda'
 
 # plane gps data
 noaa_track_file = 'noaa_tracks.rda'
+dfo_track_file = 'dfo_tracks.rda'
 
 # shelagh gps data
 shelagh_track_file = 'shelagh_tracks.rda'
@@ -62,9 +63,10 @@ clean_latlon = function(d){
   return(d)
 }
 
-# read in NOAA tracklines -------------------------------------------------
+# read in plane tracklines -------------------------------------------------
 
 load(noaa_track_file)
+load(dfo_track_file)
 
 # read in shelagh tracklines ----------------------------------------------
 
@@ -135,7 +137,7 @@ server <- function(input, output, session) {
   
   sightings_grp = paste0("Sightings (all vessel and aerial) [latest: ",
                          format(max(sightings$date), '%d-%b'),'; n = ', nrow(sightings),']')
-  noaa_track_grp = paste0("NOAA plane effort [latest: ",
+  plane_track_grp = paste0("NOAA and DFO plane effort [latest: ",
                           format(max(noaa_track$date, na.rm = T), '%d-%b'),']')
   shelagh_track_grp = paste0("Shelagh effort [latest: ",
                              format(max(shelagh_track$date, na.rm = T), '%d-%b'),']')
@@ -159,6 +161,10 @@ server <- function(input, output, session) {
   
   filteredNoaaTrack <- reactive({
     noaa_track[noaa_track$date >= input$range[1] & noaa_track$date <= input$range[2],]
+  })
+  
+  filteredDfoTrack <- reactive({
+    dfo_track[dfo_track$date >= input$range[1] & dfo_track$date <= input$range[2],]
   })
   
   filteredShelaghTrack <- reactive({
@@ -209,7 +215,7 @@ server <- function(input, output, session) {
     addLayersControl(
       overlayGroups = c('Place names',
                         sightings_grp, 
-                        noaa_track_grp,
+                        plane_track_grp,
                         shelagh_track_grp,
                         sono_grp, 
                         detected_grp, 
@@ -219,7 +225,7 @@ server <- function(input, output, session) {
       options = layersControlOptions(collapsed = TRUE), position = 'bottomright') %>%
     
       # hide some groups by default
-    hideGroup(c('Place names', noaa_track_grp, shelagh_track_grp, glider_surf_grp, possible_grp, sono_grp))
+    hideGroup(c('Place names', plane_track_grp, shelagh_track_grp, glider_surf_grp, possible_grp, sono_grp))
   })
     
   # add NOAA chart ------------------------------------------------------------------
@@ -260,7 +266,10 @@ server <- function(input, output, session) {
       clearShapes() %>%
       
       # add NOAA gps track
-      addPolylines(data = filteredNoaaTrack(), ~lon, ~lat, weight = 2, color = '#8B6914', group = noaa_track_grp) %>%
+      addPolylines(data = filteredNoaaTrack(), ~lon, ~lat, weight = 2, color = '#8B6914', group = plane_track_grp) %>%
+      
+      # add DFO gps track
+      addPolylines(data = filteredDfoTrack(), ~lon, ~lat, weight = 2, color = '#8B6914', group = plane_track_grp) %>%
       
       # add shelagh gps track
       addPolylines(data = filteredShelaghTrack(), ~lon, ~lat, weight = 2, color = '#2E2E2E', group = shelagh_track_grp) %>%
