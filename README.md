@@ -35,3 +35,5 @@ The live application can currently be accessed [here](http://leviathan.ocean.dal
 * improve interface for mobile users  
 
 * figure out how to overlay isobaths (from ETOPO1 or other)  
+
+* scale size of markers to reflect group size  
