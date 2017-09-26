@@ -60,12 +60,17 @@ for(i in 1:nrow(drive_data_list)){
 
 # process tracks ----------------------------------------------------------
 
-# proceed only if new files were downloaded, or data file does not exist
-if(c > 0 | !file.exists(fout)){
+load('dfo_tracks.rda')
+dfo_track_list_new = list.files(local_dir)
+
+if(!exists("dfo_track_list")){dfo_track_list = NULL}
+
+# proceed only if new files were downloaded
+if(length(dfo_track_list_new) != length(dfo_track_list)){
   
   # prepare loop
-  dfo_track_list = list.files(local_dir)
   dfo_track = data.frame()
+  dfo_track_list = list.files(local_dir)
   
   for(i in seq_along(dfo_track_list)){
     tmp = readGPX(paste0(local_dir, '/', dfo_track_list[i]))$tracks
@@ -95,6 +100,6 @@ if(c > 0 | !file.exists(fout)){
   }
   
   # save for use in the app
-  save(dfo_track, file = fout)
+  save(dfo_track, dfo_track_list, file = fout)
 }
 
