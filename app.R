@@ -66,7 +66,6 @@ clean_latlon = function(d){
 # read in plane tracklines -------------------------------------------------
 
 load(noaa_track_file)
-load(dfo_track_file)
 
 # read in shelagh tracklines ----------------------------------------------
 
@@ -126,6 +125,9 @@ server <- function(input, output, session) {
   
   # load glider data file
   load(glider_data_file)
+  
+  # dfo plane data -------------------------------------------------------
+  load(dfo_track_file)
   
   # combine detections/sightings --------------------------------------------
   
